@@ -28,7 +28,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/zcy510/imagebed/main/img/202204181617837.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/zcy510/imagebed/main/img/202204181617633.png">
 <meta property="article:published_time" content="2022-04-18T08:10:58.000Z">
-<meta property="article:modified_time" content="2022-04-18T08:17:40.773Z">
+<meta property="article:modified_time" content="2022-04-18T08:26:10.254Z">
 <meta property="article:author" content="Zcy">
 <meta property="article:tag" content="计算机图形学">
 <meta property="article:tag" content="Ray Tracing">
@@ -675,6 +675,48 @@ class="math inline">\(origin\)</span> 位置的随机偏移量。代码如下：
 
 
 
+
+  
+
+  
+    <!-- MathJax -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        loader: {
+          load: ['ui/lazy']
+        },
+        options: {
+          renderActions: {
+            findScript: [10, doc => {
+              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = { node: text, delim: '', n: 0 };
+                math.end = { node: text, delim: '', n: 0 };
+                doc.math.push(math);
+              });
+            }, '', false],
+            insertedScript: [200, () => {
+              document.querySelectorAll('mjx-container').forEach(node => {
+                let target = node.parentNode;
+                if (target.nodeName.toLowerCase() === 'li') {
+                  target.parentNode.classList.add('has-jax');
+                }
+              });
+            }, '', false]
+          }
+        }
+      };
+    </script>
+
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" ></script>
+
+  
 
 
 
