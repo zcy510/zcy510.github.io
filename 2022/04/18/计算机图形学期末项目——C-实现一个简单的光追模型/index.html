@@ -1,0 +1,707 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Zcy">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="《计算机图形学》期末报告 简单物体的光线追踪模型 ​ 学校：华东师范大学 ​ 院系：计算机科学与技术学院 ​ 专业：计算机图形学 ​ 年级：2020级 ​ 作者： 周成毅 ​ 学号：10205102440 ​ 日期：2021.12.25  [TOC] 第一章. 报告简介 本项目通过光线追踪算法实现一些简单物体的渲染，并通过文件输出流方式将渲染的图片写入PPM格式中。通俗来讲">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算机图形学期末项目——C++实现一个简单的光追模型">
+<meta property="og:url" content="https://zcy510.github.io/2022/04/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E6%9C%9F%E6%9C%AB%E9%A1%B9%E7%9B%AE%E2%80%94%E2%80%94C-%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E5%85%89%E8%BF%BD%E6%A8%A1%E5%9E%8B/index.html">
+<meta property="og:site_name" content="Zcy&#39;s blog">
+<meta property="og:description" content="《计算机图形学》期末报告 简单物体的光线追踪模型 ​ 学校：华东师范大学 ​ 院系：计算机科学与技术学院 ​ 专业：计算机图形学 ​ 年级：2020级 ​ 作者： 周成毅 ​ 学号：10205102440 ​ 日期：2021.12.25  [TOC] 第一章. 报告简介 本项目通过光线追踪算法实现一些简单物体的渲染，并通过文件输出流方式将渲染的图片写入PPM格式中。通俗来讲">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/zcy510/imagebed/main/img/202204181616102.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/zcy510/imagebed/main/img/202204181616597.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/zcy510/imagebed/main/img/202204181617837.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/zcy510/imagebed/main/img/202204181617633.png">
+<meta property="article:published_time" content="2022-04-18T08:10:58.000Z">
+<meta property="article:modified_time" content="2022-04-18T08:17:40.773Z">
+<meta property="article:author" content="Zcy">
+<meta property="article:tag" content="计算机图形学">
+<meta property="article:tag" content="Ray Tracing">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/zcy510/imagebed/main/img/202204181616102.png">
+  
+  
+  <title>计算机图形学期末项目——C++实现一个简单的光追模型 - Zcy&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"zcy510.github.io","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"huto9HnV0xE2AAcSuYNg9nKW-gzGzoHsz","app_key":"V9GFqeAOBWSxu1YHK9HXAa3k","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>首页</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="计算机图形学期末项目——C++实现一个简单的光追模型">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-author" aria-hidden="true"></i>
+      Zcy
+    </span>
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-04-18 16:10" pubdate>
+        2022年4月18日 下午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      11k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      89 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- LeanCloud 统计文章PV -->
+      <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="leancloud-page-views"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">计算机图形学期末项目——C++实现一个简单的光追模型</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：几秒前
+                
+              </p>
+            
+            <div class="markdown-body">
+              <h1 id="计算机图形学期末报告">《计算机图形学》期末报告</h1>
+<h3 id="简单物体的光线追踪模型">简单物体的光线追踪模型</h3>
+<p>​ 学校：华东师范大学</p>
+<p>​ 院系：计算机科学与技术学院</p>
+<p>​ 专业：计算机图形学</p>
+<p>​ 年级：2020级</p>
+<p>​ 作者： 周成毅</p>
+<p>​ 学号：10205102440</p>
+<p>​ 日期：2021.12.25</p>
+<p><img src="https://raw.githubusercontent.com/zcy510/imagebed/main/img/202204181616102.png" srcset="/img/loading.gif" lazyload alt="ecnu_logo" style="zoom:33%;" /></p>
+<p>[TOC]</p>
+<h5 id="第一章.-报告简介">第一章. 报告简介</h5>
+<p>本项目通过光线追踪算法实现一些简单物体的渲染，并通过文件输出流方式将渲染的图片写入PPM格式中。通俗来讲就是追踪“目所能及”的光线路径，所以容易被误解成是从“照相机”（观察者位置）发出光线，但是这种方法能够更加准确现实地模拟光线，实现很好的图像效果；反射、折射、阴影都是这个算法的一个自然结果。</p>
+<h5 id="第二章.-项目结构目录">第二章. 项目结构目录</h5>
+<figure class="highlight tex"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></div></td><td class="code"><pre><code class="hljs tex">Eigen                     //矩阵类头文件<br>camera.h                  //摄像机（观察者）类<br>color.h                   //颜色类<br>ellipsoid.h               //椭球类<br>hittable.h                //碰撞类<br>hittable<span class="hljs-built_in">_</span>list.h           //多物体碰撞类<br>material.h                //材料类<br>ray.h                     //光线类<br>rtweekend.h               //常用的函数和常用的常量在此定义<br>sphere.h                  //球类<br>vec3.h                    //三维坐标类<br>main.cpp                  //主函数，将每个像素颜色的RGB值写入PPM文件<br>    <br></code></pre></td></tr></table></figure>
+<h5 id="第三章.-建模核心技术">第三章. 建模核心技术</h5>
+<h6 id="光线追踪算法">1. 光线追踪算法</h6>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs tex">光线追踪 (Ray Tracing) 算法是一种基于真实光路模拟的计算机三维图形渲染算法，相比其它大部分渲染算法，光线追踪算法可以提供更为真实的光影效果。此算法由 Appel 在 1968 年初步提出，1980 年由Whitted 改良为递归算法并提出全局光照模型。直到今天，光线追踪算法仍是图形学的热点，大量的改进在不断涌现。基于对自然界光路的研究, 光线追踪采取逆向计算光路来还原真实颜色。追踪的过程中涵盖了光的反射、折射、吸收等特性 (精确计算)， 并辅以其它重要渲染思想 (进一步模拟)。 其中包含了重要方法，诸如冯氏光照模型 (Phong Shading)、辐射度(Radiosity)、光子映射 (Photon Mapping)、蒙特卡罗方法 (Monte Carlo) 等等。<br></code></pre></td></tr></table></figure>
+<h6 id="圆球求交算法">2. 圆球求交算法</h6>
+<p>在 <span class="math inline">\(ray.h\)</span>
+头文件内，将光线定义成了如下形式： <span class="math display">\[
+P(t)=orgin+t*direction
+\]</span> 其中， <span class="math inline">\(orgin\)</span>
+为光线发出点，<span class="math inline">\(direction\)</span>
+为光线的方向向量，此种定义方式在稍后的椭球求交中也方便计算。</p>
+<p>我们记球的球心为 <span
+class="math inline">\(C\,(C_x,C_y,C_z)\)</span>，球的半径为 <span
+class="math inline">\(R\)</span> ，则球的方程为： <span
+class="math display">\[
+(x-C_x)^2+(y-C_y)^2+(z-C_z)^2 = R^2
+\]</span> 方程可以替换成向量方程， <span class="math display">\[
+(P(t)-C)(P(t)-C)=R^2\\
+\Rightarrow (orgin+t*direction-C)^2=R^2
+\]</span> 展开可以得到一个一元二次方程， <span class="math display">\[
+(direction)^2\cdot t^2+2\cdot direction\cdot (origin-C)\cdot t
++(origin-C)^2-R^2=0
+\]</span>
+至此，求解光线与球的交点问题就变成了一个一元二次方程的求解问题，运算不多赘述，代码如下，</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">sphere::hit</span><span class="hljs-params">(<span class="hljs-type">const</span> ray &amp;r, <span class="hljs-type">double</span> t_min, <span class="hljs-type">double</span> t_max, hit_record &amp;rec)</span> <span class="hljs-type">const</span> </span>&#123;<br>    vec3 oc = r.<span class="hljs-built_in">origin</span>() - center;<br>    <span class="hljs-keyword">auto</span> a = r.<span class="hljs-built_in">direction</span>().<span class="hljs-built_in">length_squared</span>();<br>    <span class="hljs-keyword">auto</span> half_b = <span class="hljs-built_in">dot</span>(oc, r.<span class="hljs-built_in">direction</span>());<br>    <span class="hljs-keyword">auto</span> c = oc.<span class="hljs-built_in">length_squared</span>() - radius * radius;<br><br>    <span class="hljs-keyword">auto</span> discriminant = half_b * half_b - a * c;<br>    <span class="hljs-keyword">if</span> (discriminant &lt; <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>    <span class="hljs-keyword">auto</span> sqrtd = <span class="hljs-built_in">sqrt</span>(discriminant);<br><br>    <span class="hljs-comment">// Find the nearest root that lies in the acceptable range.</span><br>    <span class="hljs-keyword">auto</span> root = (-half_b - sqrtd) / a;<br>    <span class="hljs-keyword">if</span> (root &lt; t_min || t_max &lt; root) &#123;<br>        root = (-half_b + sqrtd) / a;<br>        <span class="hljs-keyword">if</span> (root &lt; t_min || t_max &lt; root)<br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>    &#125;<br><br>    rec.t = root;<br>    rec.p = r.<span class="hljs-built_in">at</span>(rec.t);<br>    vec3 outward_normal = (rec.p - center) / radius;<br>    rec.<span class="hljs-built_in">set_face_normal</span>(r, outward_normal);<br>    rec.mat_ptr = mat_ptr;<br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h6 id="椭球求交算法">3. 椭球求交算法</h6>
+<p><img src="https://raw.githubusercontent.com/zcy510/imagebed/main/img/202204181616597.png" srcset="/img/loading.gif" lazyload alt="image-20211226104611544"  /></p>
+<p>上述示意图中，<span class="math inline">\(C\)</span>
+为椭球球心，<span class="math inline">\(a\)</span> 为 <span
+class="math inline">\(x\)</span> 轴向半径，<span
+class="math inline">\(b\)</span> 为 <span
+class="math inline">\(y\)</span> 轴向半径，<span
+class="math inline">\(c\)</span> 为 <span
+class="math inline">\(z\)</span> 轴向半径，<span
+class="math inline">\(L_0\)</span> 为光线起点，<span
+class="math inline">\(v\)</span> 为光线方向矢量。</p>
+<p>如下矩阵是将椭球转化成球心位于原点处的单位球的变换矩阵。 <span
+class="math display">\[
+T = \left[
+\matrix{
+  1 &amp; 0 &amp; 0　&amp; C_x\\
+  0 &amp; 1 &amp; 0 &amp; C_y\\
+  0 &amp; 0 &amp; 1 &amp; C_z\\
+  0 &amp; 0 &amp; 0 &amp; 1
+}
+\right],\quad
+R=\left[
+\matrix{
+  \hat{a_x} &amp; \hat{b_x} &amp; \hat{c_x}　&amp; 0\\
+  \hat{a_y} &amp; \hat{b_y} &amp; \hat{c_z} &amp; 0\\
+  \hat{a_z} &amp; \hat{b_z} &amp; \hat{c_z} &amp; 0\\
+  0 &amp; 0 &amp; 0 &amp; 1
+}
+\right],\quad
+S= \left[
+\matrix{
+  ||a|| &amp; 0 &amp; 0　&amp; 0\\
+  0 &amp; ||b|| &amp; 0 &amp; 0\\
+  0 &amp; 0 &amp; ||c|| &amp; 0\\
+  0 &amp; 0 &amp; 0 &amp; 1
+}
+\right]
+\]</span> 其中 <span class="math inline">\(T\)</span> 为平移矩阵，<span
+class="math inline">\(R\)</span> 为旋转矩阵，<span
+class="math inline">\(S\)</span> 为缩放矩阵。那么组合变换矩阵 <span
+class="math inline">\(M=TRS\)</span>。</p>
+<p>思路为：</p>
+<ol type="1">
+<li>将该变换应用于与椭球体进行相交计算的直线。</li>
+<li>计算变换后的直线与与位于原点的单位球体的相交情况。</li>
+<li>将结果应用于变换前的直线，获取相交点。</li>
+</ol>
+<p>若以 <span class="math inline">\(C&#39;\)</span>
+为单位球体的球心，则球体表面上的点应该满足： <span
+class="math display">\[
+||P-C&#39;||^2=(R&#39;)^2
+\]</span> 由于球体为球心位于原点的单位球体，因此 <span
+class="math inline">\(C&#39;\)</span> 为原点，且 <span
+class="math inline">\(R&#39;\)</span> 为1： <span
+class="math display">\[
+C&#39;=M^{-1}C=\left[\matrix{0\\0\\0\\1}\right]\, R&#39;=1
+\]</span> 同样，在求椭球的交点的过程中，直线使用参数方程的表示： <span
+class="math display">\[
+L(t)=L_0+t*v
+\]</span> 对直线进行坐标转换（和转换矩阵相乘）： <span
+class="math display">\[
+L&#39;(t)=M^{-1}L_0+M^{-1}*t*v
+\]</span> 记 <span class="math inline">\(L&#39;_0=M^{-1}L_0,\, v&#39; =
+M^{-1}v\)</span>
+，接下来的运算就和上面所述的圆球求交算法一样了，此处不多赘述，代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">//矩阵求逆，求转换后的L0和v</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">inverseMatrix</span><span class="hljs-params">(vec3 cen, vec3 &amp;origin, vec3 &amp;direction, <span class="hljs-type">double</span> x, <span class="hljs-type">double</span> y, <span class="hljs-type">double</span> z)</span> </span>&#123;<br>    Matrix4d m1, m2, m3, m4, m5;<br>    m1 &lt;&lt; <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, cen.<span class="hljs-built_in">x</span>(),<br>            <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, cen.<span class="hljs-built_in">y</span>(),<br>            <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, cen.<span class="hljs-built_in">z</span>(),<br>            <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>;<br>    <span class="hljs-comment">//std::cout&lt;&lt;m1.inverse();</span><br>    m5 &lt;&lt; <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>,<br>            <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>,<br>            <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>,<br>            <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>;<br>    m2 &lt;&lt; x, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>,<br>            <span class="hljs-number">0</span>, y, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>,<br>            <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, z, <span class="hljs-number">1</span>,<br>            <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>;<br><br>    m3 = m1 * m5*m2;<br>    m4 = m3.<span class="hljs-built_in">inverse</span>();<br>    <span class="hljs-function">Vector4d <span class="hljs-title">v1</span><span class="hljs-params">(origin.x(), origin.y(), origin.z(), <span class="hljs-number">1</span>)</span>, <span class="hljs-title">v2</span><span class="hljs-params">(direction.x(), direction.y(), direction.z(), <span class="hljs-number">1</span>)</span></span>;<br>    v1 = m4 * v1;<br>    v2 = m4 * v2;<br>    origin[<span class="hljs-number">0</span>] = <span class="hljs-built_in">v1</span>(<span class="hljs-number">0</span>), origin[<span class="hljs-number">1</span>] = <span class="hljs-built_in">v1</span>(<span class="hljs-number">1</span>), origin[<span class="hljs-number">2</span>] = <span class="hljs-built_in">v1</span>(<span class="hljs-number">2</span>);<br>    direction[<span class="hljs-number">0</span>] = <span class="hljs-built_in">v2</span>(<span class="hljs-number">0</span>), direction[<span class="hljs-number">1</span>] = <span class="hljs-built_in">v2</span>(<span class="hljs-number">1</span>), direction[<span class="hljs-number">2</span>] = <span class="hljs-built_in">v2</span>(<span class="hljs-number">2</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">ellipsoid::hit</span><span class="hljs-params">(<span class="hljs-type">const</span> ray &amp;r, <span class="hljs-type">double</span> t_min, <span class="hljs-type">double</span> t_max, hit_record &amp;rec)</span> <span class="hljs-type">const</span> </span>&#123;<br><br>    vec3 tmp1,tmp2;<br>    tmp1=r.<span class="hljs-built_in">origin</span>(),tmp2=r.<span class="hljs-built_in">direction</span>();<br>    <span class="hljs-built_in">inverseMatrix</span>(center,tmp1,tmp2,a,b,c);<br><br>    <span class="hljs-keyword">auto</span> a = tmp2.<span class="hljs-built_in">length_squared</span>();<br>    <span class="hljs-keyword">auto</span> half_b = <span class="hljs-built_in">dot</span>(tmp1,tmp2);<br>    <span class="hljs-keyword">auto</span> c = tmp1.<span class="hljs-built_in">length_squared</span>()<span class="hljs-number">-1</span>;<br><br>    <span class="hljs-keyword">auto</span> discriminant = half_b*half_b-a*c;<br>    <span class="hljs-keyword">if</span> (discriminant &lt; <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>    <span class="hljs-keyword">auto</span> sqrtd = <span class="hljs-built_in">sqrt</span>(discriminant);<br><br>    <span class="hljs-comment">// Find the nearest root that lies in the acceptable range.</span><br>    <span class="hljs-keyword">auto</span> root = (-half_b - sqrtd) / a;<br>    <span class="hljs-keyword">if</span> (root &lt; t_min || t_max &lt; root) &#123;<br>        root = (-half_b + sqrtd) / a;<br>        <span class="hljs-keyword">if</span> (root &lt; t_min || t_max &lt; root)<br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>    &#125;<br><br>    rec.t = root;<br>    rec.p = r.<span class="hljs-built_in">at</span>(rec.t);<br>    <span class="hljs-function">vec3 <span class="hljs-title">elli_normal</span><span class="hljs-params">(<span class="hljs-number">2</span>*rec.p.x()/(a*a),<span class="hljs-number">2</span>*rec.p.y()/(b*b),<span class="hljs-number">2</span>*rec.p.z()/(c*c))</span></span>;<br>    vec3 outward_normal = <span class="hljs-built_in">unit_vector</span>(elli_normal);<br>    rec.<span class="hljs-built_in">set_face_normal</span>(r, outward_normal);<br>    rec.mat_ptr = mat_ptr;<br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h6 id="光线追踪递归算法">4. 光线追踪递归算法</h6>
+<p>此函数首先判断光线是否与场景中的物体相交，若光线与物体相交，同时这个交点比之前的交点还要接近摄像机，则记录这一交点，抛弃之前的交点。函数执行完后，要么返回没有交点的信息，要么返回交点的位置、法线和材质。如果返回的是没有交点的情况，则递归函数也需要退出，此时返回一个特定的颜色结果，一般为背景颜色信息。如果返回的是有交点的情况，就需要根据交点处的材质情况，生成新的光线以及这个光线的颜色衰减参数。对于漫反射材质，它在不同的球面角度上是均匀分布的，对于镜面反射材质，它在球面上呈特定的分布。光线确定后，在此处继续调用这个递归函数，获得这根光线与场景中的全部物体相交后所得到的颜色。对这个颜色按刚才计算相交点材质所得到的衰减系数进行计算，就得到这一像素点最终的颜色。对于某些材质而言，可能本身就按一定概率不生成新的光线（全部吸收掉了），此时递归退出，并返回默认颜色（黑色）。代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function">color <span class="hljs-title">ray_color</span><span class="hljs-params">(<span class="hljs-type">const</span> ray &amp;r, <span class="hljs-type">const</span> hittable &amp;world, <span class="hljs-type">int</span> depth)</span> </span>&#123;<br>    hit_record rec;<br><br>    <span class="hljs-comment">// If we&#x27;ve exceeded the ray bounce limit, no more light is gathered.</span><br>    <span class="hljs-keyword">if</span> (depth &lt;= <span class="hljs-number">0</span>)<br>        <span class="hljs-keyword">return</span> <span class="hljs-built_in">color</span>(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>);<br><br>    <span class="hljs-keyword">if</span> (world.<span class="hljs-built_in">hit</span>(r, <span class="hljs-number">0.001</span>, infinity, rec)) &#123;<br>        ray scattered;<br>        color attenuation;<br>        <span class="hljs-keyword">if</span> (rec.mat_ptr-&gt;<span class="hljs-built_in">scatter</span>(r, rec, attenuation, scattered))<br>            <span class="hljs-keyword">return</span> attenuation * <span class="hljs-built_in">ray_color</span>(scattered, world, depth - <span class="hljs-number">1</span>);<br>        <span class="hljs-keyword">return</span> <span class="hljs-built_in">color</span>(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>);<br>    &#125;<br><br>    vec3 unit_direction = <span class="hljs-built_in">unit_vector</span>(r.<span class="hljs-built_in">direction</span>());<br>    <span class="hljs-keyword">auto</span> t = <span class="hljs-number">0.5</span> * (unit_direction.<span class="hljs-built_in">y</span>() + <span class="hljs-number">1.0</span>);<br>    <span class="hljs-keyword">return</span> (<span class="hljs-number">1.0</span> - t) * <span class="hljs-built_in">color</span>(<span class="hljs-number">1.0</span>, <span class="hljs-number">1.0</span>, <span class="hljs-number">1.0</span>) + t * <span class="hljs-built_in">color</span>(<span class="hljs-number">0.5</span>, <span class="hljs-number">0.7</span>, <span class="hljs-number">1.0</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+<h6 id="lambertian-reflection-反射实现朗伯辐射体磨砂材质">5. <span
+class="math inline">\(Lambertian\)</span> <span
+class="math inline">\(Reflection\)</span>
+反射实现朗伯辐射体（磨砂材质）</h6>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs tex">余弦辐射体，也称为朗伯辐射体(Lambert radiator)，指的是发光强度的空间分布符合余弦定律的发光体（不论是自发光或是反射光），其在不同角度的辐射强度会依余弦公式变化，角度越大强度越弱。<br></code></pre></td></tr></table></figure>
+<p><span class="math display">\[
+L_{\theta}=\dfrac{I_{\theta}}{dA\cos\theta}=\dfrac{I_{N}\cos\theta}{dA\cos\theta}
+\]</span></p>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs tex">遵循朗伯定律的表面被称为兰伯特表面，并表现出朗伯反射率。这样的表面从任何角度看都具有相同的辐射度。这意味着，例如，对人眼而言，它具有相同的视亮度（或亮度）。因为功率和实心角之间的比例是恒定的，所以辐射度（单位实心角单位投射源面积的功率）保持不变。<br></code></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">inline</span> vec3 <span class="hljs-title">random_in_unit_sphere</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>) &#123;<br>        <span class="hljs-keyword">auto</span> p = vec3::<span class="hljs-built_in">random</span>(<span class="hljs-number">-1</span>, <span class="hljs-number">1</span>);<br>        <span class="hljs-keyword">if</span> (p.<span class="hljs-built_in">length_squared</span>() &gt;= <span class="hljs-number">1</span>) <span class="hljs-keyword">continue</span>;<br>        <span class="hljs-keyword">return</span> p;<br>    &#125;<br>&#125;<br><br><span class="hljs-function">vec3 <span class="hljs-title">random_unit_vector</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">unit_vector</span>(<span class="hljs-built_in">random_in_unit_sphere</span>());<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><span class="math inline">\(Lambertian\)</span> 材料类的实现：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">lambertian</span> : <span class="hljs-keyword">public</span> material &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">lambertian</span>(<span class="hljs-type">const</span> color &amp;a) : <span class="hljs-built_in">albedo</span>(a) &#123;&#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">bool</span> <span class="hljs-title">scatter</span><span class="hljs-params">(</span></span><br><span class="hljs-params"><span class="hljs-function">            <span class="hljs-type">const</span> ray &amp;r_in, <span class="hljs-type">const</span> hit_record &amp;rec, color &amp;attenuation, ray &amp;scattered</span></span><br><span class="hljs-params"><span class="hljs-function">    )</span> <span class="hljs-type">const</span> <span class="hljs-keyword">override</span> </span>&#123;<br>        <span class="hljs-keyword">auto</span> scatter_direction = rec.normal + <span class="hljs-built_in">random_unit_vector</span>();    <span class="hljs-comment">//获取随机的散射光线</span><br><br>        <span class="hljs-comment">// Catch degenerate scatter direction</span><br>        <span class="hljs-keyword">if</span> (scatter_direction.<span class="hljs-built_in">near_zero</span>())<br>            scatter_direction = rec.normal;<br><br>        scattered = <span class="hljs-built_in">ray</span>(rec.p, scatter_direction);<br>        attenuation = albedo;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>    &#125;<br><br><span class="hljs-keyword">public</span>:<br>    color albedo;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<h6 id="金属类材质">6. 金属类材质</h6>
+<p>金属类材质就是只有反射没有折射的一种材料，但同时不同金属之间的反射特点也不一样。比如抛光的不锈钢材料，这种我们可以看成是全反射的材料，还有一些表面不是那么光滑的金属，那么他也会存在有漫反射，所以我们对金属类材质除了添加颜色参数以外，我们还添加一个参数
+<span class="math inline">\(fuzz\)</span>
+，用于模拟金属的漫反射（金属的模糊度，实现方法见下述代码中含有注释的一行）。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">metal</span> : <span class="hljs-keyword">public</span> material &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">metal</span>(<span class="hljs-type">const</span> color &amp;a, <span class="hljs-type">double</span> f) : <span class="hljs-built_in">albedo</span>(a), <span class="hljs-built_in">fuzz</span>(f &lt; <span class="hljs-number">1</span> ? f : <span class="hljs-number">1</span>) &#123;&#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">bool</span> <span class="hljs-title">scatter</span><span class="hljs-params">(</span></span><br><span class="hljs-params"><span class="hljs-function">            <span class="hljs-type">const</span> ray &amp;r_in, <span class="hljs-type">const</span> hit_record &amp;rec, color &amp;attenuation, ray &amp;scattered</span></span><br><span class="hljs-params"><span class="hljs-function">    )</span> <span class="hljs-type">const</span> <span class="hljs-keyword">override</span> </span>&#123;<br>        vec3 reflected = <span class="hljs-built_in">reflect</span>(<span class="hljs-built_in">unit_vector</span>(r_in.<span class="hljs-built_in">direction</span>()), rec.normal);<br>        scattered = <span class="hljs-built_in">ray</span>(rec.p, reflected + fuzz * <span class="hljs-built_in">random_in_unit_sphere</span>());  <span class="hljs-comment">//获取反射光线</span><br>        attenuation = albedo;<br>        <span class="hljs-keyword">return</span> (<span class="hljs-built_in">dot</span>(scattered.<span class="hljs-built_in">direction</span>(), rec.normal) &gt; <span class="hljs-number">0</span>);<br>    &#125;<br><br><span class="hljs-keyword">public</span>:<br>    color albedo;<br>    <span class="hljs-type">double</span> fuzz;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<h6 id="玻璃类材质无色">7. 玻璃类材质（无色）</h6>
+<p>玻璃类材质可以透光，所以存在折射现象，并且不同玻璃的折射率不同，所以在
+<span class="math inline">\(dielectric\)</span> 类中，我们添加了一个参数
+<span class="math inline">\(ir\)</span>
+用于表示该材质的折射率；但有这个还不够，因为光的折射同样应该满足能量守恒定律，即入射光能量=反射光能量+折射光能量。所以我们还应该添加一个反射率，但真实的玻璃具有随角度变化的反射率（比如以陡峭的角度看窗户，它将变成一面镜子），此处我们使用
+<span class="math inline">\(Christophe\)</span> <span
+class="math inline">\(Schlick\)</span> 多项式去近似。 <span
+class="math display">\[
+R(\theta)=R_0+(1-R_0)(1-\cos\theta)^5\\
+R_0=(\dfrac{n_1-n_2}{n_1+n_2})^2
+\]</span> 这里的 <span class="math inline">\(\theta\)</span>
+是入射光线与交点处法线的夹角，<span class="math inline">\(n_1\)</span>
+和 <span class="math inline">\(n_2\)</span>
+分别是光传播介质的折射率（本项目中都是真空，即 <span
+class="math inline">\(n_1=1\)</span>） 和光击中物体的折射率。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">dielectric</span> : <span class="hljs-keyword">public</span> material &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">dielectric</span>(<span class="hljs-type">double</span> index_of_refraction) : <span class="hljs-built_in">ir</span>(index_of_refraction) &#123;&#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">bool</span> <span class="hljs-title">scatter</span><span class="hljs-params">(</span></span><br><span class="hljs-params"><span class="hljs-function">            <span class="hljs-type">const</span> ray &amp;r_in, <span class="hljs-type">const</span> hit_record &amp;rec, color &amp;attenuation, ray &amp;scattered</span></span><br><span class="hljs-params"><span class="hljs-function">    )</span> <span class="hljs-type">const</span> <span class="hljs-keyword">override</span> </span>&#123;<br>        attenuation = <span class="hljs-built_in">color</span>(<span class="hljs-number">1.0</span>, <span class="hljs-number">1.0</span>, <span class="hljs-number">1.0</span>);<br>        <span class="hljs-type">double</span> refraction_ratio = rec.front_face ? (<span class="hljs-number">1.0</span> / ir) : ir;<br><br>        vec3 unit_direction = <span class="hljs-built_in">unit_vector</span>(r_in.<span class="hljs-built_in">direction</span>());<br><br>        <span class="hljs-type">double</span> cos_theta = <span class="hljs-built_in">fmin</span>(<span class="hljs-built_in">dot</span>(-unit_direction, rec.normal), <span class="hljs-number">1.0</span>);<br>        <span class="hljs-type">double</span> sin_theta = <span class="hljs-built_in">sqrt</span>(<span class="hljs-number">1.0</span> - cos_theta * cos_theta);<br><br>        <span class="hljs-type">bool</span> cannot_refract = refraction_ratio * sin_theta &gt; <span class="hljs-number">1.0</span>;<br>        vec3 direction;<br><br>        <span class="hljs-keyword">if</span> (cannot_refract || <span class="hljs-built_in">reflectance</span>(cos_theta, refraction_ratio) &gt; <span class="hljs-built_in">random_double</span>())<br>            direction = <span class="hljs-built_in">reflect</span>(unit_direction, rec.normal);<br>        <span class="hljs-keyword">else</span><br>            direction = <span class="hljs-built_in">refract</span>(unit_direction, rec.normal, refraction_ratio);<br><br>        scattered = <span class="hljs-built_in">ray</span>(rec.p, direction);<br>        vec3 refracted = <span class="hljs-built_in">refract</span>(unit_direction, rec.normal, refraction_ratio);<br><br>        scattered = <span class="hljs-built_in">ray</span>(rec.p, refracted);<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>    &#125;<br><br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-type">double</span> ir; <span class="hljs-comment">// Index of Refraction</span><br><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-function"><span class="hljs-type">static</span> <span class="hljs-type">double</span> <span class="hljs-title">reflectance</span><span class="hljs-params">(<span class="hljs-type">double</span> cosine, <span class="hljs-type">double</span> ref_idx)</span> </span>&#123;<br>        <span class="hljs-comment">// Use Schlick&#x27;s approximation for reflectance.</span><br>        <span class="hljs-keyword">auto</span> r0 = (<span class="hljs-number">1</span> - ref_idx) / (<span class="hljs-number">1</span> + ref_idx);<br>        r0 = r0 * r0;<br>        <span class="hljs-keyword">return</span> r0 + (<span class="hljs-number">1</span> - r0) * <span class="hljs-built_in">pow</span>((<span class="hljs-number">1</span> - cosine), <span class="hljs-number">5</span>);<br>    &#125;<br>&#125;;<br><br></code></pre></td></tr></table></figure>
+<h6 id="折射函数的实现">8. 折射函数的实现</h6>
+<p><img src="https://raw.githubusercontent.com/zcy510/imagebed/main/img/202204181617837.png" srcset="/img/loading.gif" lazyload alt="image-20211226200613657" style="zoom: 25%;" /></p>
+<p>根据斯涅尔定律： <span class="math display">\[
+n_1\cdot \sin\theta_1 = n_2\cdot \sin\theta_2\\
+\Rightarrow \sin\theta_2=\dfrac{n_1}{n_2}\cdot \sin\theta_1
+\]</span> 折射光线为 <span class="math inline">\(Q\)</span>
+，则其可以分解成： <span class="math display">\[
+Q=Q_{\perp}+Q_{\parallel}
+\]</span> 不难计算得： <span class="math display">\[
+Q_{\perp}=\dfrac{n_1}{n_2}(Q+\cos\theta_2\cdot n)\\
+Q_{\parallel}=-\sqrt{1-|Q_{\perp}|^2}\cdot n\\
+\]</span> 替换 <span class="math inline">\(\cos\theta_2\)</span> ：
+<span class="math display">\[
+Q_{\perp}=\dfrac{n_1}{n_2}\cdot (Q+(-Q\cdot n)\cdot n)
+\]</span> 其中 <span class="math inline">\(n\)</span>
+为法向量。代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">vec3 <span class="hljs-title">refract</span><span class="hljs-params">(<span class="hljs-type">const</span> vec3&amp; uv, <span class="hljs-type">const</span> vec3&amp; n, <span class="hljs-type">double</span> etai_over_etat)</span> </span>&#123;<br>	<span class="hljs-keyword">auto</span> cos_theta = <span class="hljs-built_in">dot</span>(-uv, n);<br>	vec3 r_out_perp = etai_over_etat * (uv + cos_theta * n);<br>	vec3 r_out_parallel = -<span class="hljs-built_in">sqrt</span>(<span class="hljs-built_in">fabs</span>(<span class="hljs-number">1.0</span> - r_out_perp.<span class="hljs-built_in">length_squared</span>())) * n;<br>	<span class="hljs-keyword">return</span> r_out_perp + r_out_parallel;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h6 id="照相机结构">9. 照相机结构</h6>
+<p><img src="https://raw.githubusercontent.com/zcy510/imagebed/main/img/202204181617633.png" srcset="/img/loading.gif" lazyload alt="image-20211226203052922" style="zoom: 50%;" /></p>
+<p><span class="math inline">\(fov\)</span> 为照相机视角，则半视高 <span
+class="math inline">\(h=\tan\dfrac{fov}{2}\)</span>，则视图高为 <span
+class="math inline">\(2*h\)</span>。 <span
+class="math inline">\(vup\)</span>
+为垂直于视图的的向量，用于确定照相机的位置。<span
+class="math inline">\(low\)</span><em><span
+class="math inline">\(left\)</span> </em> <span
+class="math inline">\(corner\)</span>
+用来辅助计算照相机射出的光线的方向。同时为了模拟真实照相机，因为真实照相机的传感器是有面积的，所以从照相机内射出的光线不都是从
+<span class="math inline">\(orgin\)</span>
+位置射出，故在获取光线的时候，在 <span
+class="math inline">\(origin\)</span> 的基础上加上了 <span
+class="math inline">\(origin\)</span> 位置的随机偏移量。代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">camera</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">camera</span>(<br>            point3 lookfrom,<br>            point3 lookat,<br>            vec3   vup,<br>            <span class="hljs-type">double</span> vfov, <span class="hljs-comment">// vertical field-of-view in degrees</span><br>            <span class="hljs-type">double</span> aspect_ratio,<br>            <span class="hljs-type">double</span> aperture,<br>            <span class="hljs-type">double</span> focus_dist<br>    ) &#123;<br>        <span class="hljs-keyword">auto</span> theta = <span class="hljs-built_in">degrees_to_radians</span>(vfov);<br>        <span class="hljs-keyword">auto</span> h = <span class="hljs-built_in">tan</span>(theta/<span class="hljs-number">2</span>);<br>        <span class="hljs-keyword">auto</span> viewport_height = <span class="hljs-number">2.0</span> * h;<br>        <span class="hljs-keyword">auto</span> viewport_width = aspect_ratio * viewport_height;<br><br>        w = <span class="hljs-built_in">unit_vector</span>(lookfrom - lookat);<br>        u = <span class="hljs-built_in">unit_vector</span>(<span class="hljs-built_in">cross</span>(vup, w));<br>        v = <span class="hljs-built_in">cross</span>(w, u);<br><br>        origin = lookfrom;<br>        horizontal = focus_dist * viewport_width * u;<br>        vertical = focus_dist * viewport_height * v;<br>        lower_left_corner = origin - horizontal/<span class="hljs-number">2</span> - vertical/<span class="hljs-number">2</span> - focus_dist*w;<br><br>        lens_radius = aperture / <span class="hljs-number">2</span>;<br>    &#125;<br><br>    <span class="hljs-function">ray <span class="hljs-title">get_ray</span><span class="hljs-params">(<span class="hljs-type">double</span> s, <span class="hljs-type">double</span> t)</span> <span class="hljs-type">const</span> </span>&#123;<br>        vec3 rd = lens_radius * <span class="hljs-built_in">random_in_unit_disk</span>();<br>        vec3 offset = u * rd.<span class="hljs-built_in">x</span>() + v * rd.<span class="hljs-built_in">y</span>();<br><br>        <span class="hljs-keyword">return</span> <span class="hljs-built_in">ray</span>(<br>                origin + offset,<br>                lower_left_corner + s*horizontal + t*vertical - origin - offset<br>        );<br>    &#125;<br><br><span class="hljs-keyword">private</span>:<br>    point3 origin;<br>    point3 lower_left_corner;<br>    vec3 horizontal;<br>    vec3 vertical;<br>    vec3 u, v, w;<br>    <span class="hljs-type">double</span> lens_radius;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<h5 id="第四章.-辅助工具包">第四章. 辅助工具包</h5>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs tex">本项目在计算空间直线与椭球的交点时使用了一个高级的C++模板头库————Eigen。它提供了用于线性代数、矩阵和向量运算、几何变换、数值求解器和相关算法。<br></code></pre></td></tr></table></figure>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/">计算机图形学</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Ray-Tracing/">Ray Tracing</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/04/17/hello-world/">
+                        <span class="hidden-mobile">Hello World</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"huto9HnV0xE2AAcSuYNg9nKW-gzGzoHsz","appKey":"V9GFqeAOBWSxu1YHK9HXAa3k","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- LeanCloud 统计PV -->
+        <span id="leancloud-site-pv-container" style="display: none">
+            总访问量 
+            <span id="leancloud-site-pv"></span>
+             次
+          </span>
+      
+      
+        <!-- LeanCloud 统计UV -->
+        <span id="leancloud-site-uv-container" style="display: none">
+            总访客数 
+            <span id="leancloud-site-uv"></span>
+             人
+          </span>
+      
+
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+  <script defer src="/js/leancloud.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
