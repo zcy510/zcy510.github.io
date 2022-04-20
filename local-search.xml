@@ -4,11 +4,11 @@
   
   
   <entry>
-    <title>数据结构——单向链表</title>
+    <title>数据结构——单向链表|引入</title>
     <link href="/2022/04/20/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E2%80%94%E2%80%94%E5%8D%95%E5%90%91%E9%93%BE%E8%A1%A8/"/>
     <url>/2022/04/20/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E2%80%94%E2%80%94%E5%8D%95%E5%90%91%E9%93%BE%E8%A1%A8/</url>
     
-    <content type="html"><![CDATA[<h1 id="链表引入">链表|引入</h1>]]></content>
+    <content type="html"><![CDATA[<h1 id="链表引入">链表|引入</h1><p>与数组一样，链表是一种线性数据结构。但与数组不同，链表元素没有储存在连续的内存中，而是使用指针链接存储在离散的内存空间中。</p><p><imgsrc="https://raw.githubusercontent.com/zcy510/imagebed/main/img/202204201044850.png" srcset="/img/loading.gif" lazyload /></p><p><strong>为什么选择链表结构，它相较于数组有什么优点？</strong></p><p>数组虽然可以用于存储线性的数据，但它有以下缺点：</p><ul><li>数组的大小是固定的，因此我们必须提前了解元素数量的上限。此外通常，当使用数组时，分配的空间需等于上限，这不可避免的可能产生了内存浪费。</li><li>在数组的指定位置插入一个新元素其代价是昂贵的，因为必须给新元素腾出一个空间，并且新元素后的所有元素必须相应都往后移动一个位置；同样的，删除一个元素的代价同样昂贵，删除元素后面的所有元素都需往前移动一个位置。</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs flow">st=&gt;start: 分配内存为n<br>的连续内存<br>cond=&gt;condition: n &gt; nr_free<br>cond1=&gt;condition: 能否找到某一个连续空<br>闲块大小大于等于n<br>cond2=&gt;condition: 找到的连续空闲<br>块大小是否大于n<br>e=&gt;end: return NULL<br>e4=&gt;end: return NULL<br>e1=&gt;end: 直接将内存<br>块分配即可<br>e3=&gt;end: 将内存块分为两块，其中一块<br>大小为n，分配即可；另一块加<br>入到空闲内存块队列中<br>st-&gt;cond<br>cond(no)-&gt;cond1<br>cond(yes)-&gt;e<br>cond1(no)-&gt;e4<br>cond1(yes)-&gt;cond2<br>cond2(no)-&gt;e1<br>cond2(yes)-&gt;e3<br></code></pre></div></td></tr></table></figure>]]></content>
     
     
     
