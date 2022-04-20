@@ -16,22 +16,22 @@
   <meta name="author" content="Zcy">
   <meta name="keywords" content="">
   
-    <meta name="description" content="单向链表|引入 与数组一样，链表是一种线性数据结构。但与数组不同，链表元素没有储存在连续的内存中，而是使用指针链接存储在离散的内存空间中。  为什么选择链表结构？ 数组虽然可以用于存储线性的数据，但它有以下缺点：  数组的大小是固定的，因此我们必须提前了解元素数量的上限。此外通常，当使用数组时，分配的空间需等于上限，这不可避免的可能产生了内存浪费。 在数组的指定位置插入一个新元素其代">
+    <meta name="description" content="单向链表|插入 在链表头部插入新节点  C++实现代码： 12345678910&#x2F;&#x2F;参数为一个指向头指针的指针，和一个新节点的数据void push(Node** head_ref, int new_data)&amp;#123;	&#x2F;&#x2F;创建新节点	Node* new_node &#x3D; new Node();	new_node-&gt;data &#x3D; new_data;	&#x2F;&#x2F;新节点应该指向头节点（之前的）">
 <meta property="og:type" content="article">
-<meta property="og:title" content="数据结构——单向链表|引入">
-<meta property="og:url" content="https://zcy510.github.io/2022/04/20/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E2%80%94%E2%80%94%E5%8D%95%E5%90%91%E9%93%BE%E8%A1%A8/index.html">
+<meta property="og:title" content="数据结构——单向链表|插入操作">
+<meta property="og:url" content="https://zcy510.github.io/2022/04/20/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E2%80%94%E2%80%94%E5%8D%95%E5%90%91%E9%93%BE%E8%A1%A81/index.html">
 <meta property="og:site_name" content="Zcy&#39;s blog">
-<meta property="og:description" content="单向链表|引入 与数组一样，链表是一种线性数据结构。但与数组不同，链表元素没有储存在连续的内存中，而是使用指针链接存储在离散的内存空间中。  为什么选择链表结构？ 数组虽然可以用于存储线性的数据，但它有以下缺点：  数组的大小是固定的，因此我们必须提前了解元素数量的上限。此外通常，当使用数组时，分配的空间需等于上限，这不可避免的可能产生了内存浪费。 在数组的指定位置插入一个新元素其代">
+<meta property="og:description" content="单向链表|插入 在链表头部插入新节点  C++实现代码： 12345678910&#x2F;&#x2F;参数为一个指向头指针的指针，和一个新节点的数据void push(Node** head_ref, int new_data)&amp;#123;	&#x2F;&#x2F;创建新节点	Node* new_node &#x3D; new Node();	new_node-&gt;data &#x3D; new_data;	&#x2F;&#x2F;新节点应该指向头节点（之前的）">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-04-20T02:32:42.000Z">
-<meta property="article:modified_time" content="2022-04-20T09:26:00.051Z">
+<meta property="article:published_time" content="2022-04-20T09:24:06.000Z">
+<meta property="article:modified_time" content="2022-04-20T11:07:09.115Z">
 <meta property="article:author" content="Zcy">
 <meta property="article:tag" content="数据结构">
 <meta property="article:tag" content="链表">
 <meta name="twitter:card" content="summary_large_image">
   
   
-  <title>数据结构——单向链表|引入 - Zcy&#39;s blog</title>
+  <title>数据结构——单向链表|插入操作 - Zcy&#39;s blog</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
@@ -177,7 +177,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="数据结构——单向链表|引入">
+            <span class="h2" id="subtitle" title="数据结构——单向链表|插入操作">
               
             </span>
 
@@ -192,8 +192,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2022-04-20 10:32" pubdate>
-        2022年4月20日 上午
+      <time datetime="2022-04-20 17:24" pubdate>
+        2022年4月20日 下午
       </time>
     </span>
   
@@ -203,7 +203,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      1.8k 字
+      1.1k 字
     </span>
   
 
@@ -212,7 +212,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      15 分钟
+      9 分钟
     </span>
   
 
@@ -249,54 +249,31 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">数据结构——单向链表|引入</h1>
+            <h1 style="display: none">数据结构——单向链表|插入操作</h1>
             
               <p class="note note-info">
                 
-                  本文最后更新于：2 小时前
+                  本文最后更新于：几秒前
                 
               </p>
             
             <div class="markdown-body">
-              <h1 id="单向链表引入">单向链表|引入</h1>
-<p>与数组一样，链表是一种线性数据结构。但与数组不同，链表元素没有储存在连续的内存中，而是使用指针链接存储在离散的内存空间中。</p>
+              <h1 id="单向链表插入">单向链表|插入</h1>
+<p><strong>在链表头部插入新节点</strong></p>
 <p><img
-src="https://raw.githubusercontent.com/zcy510/imagebed/main/img/202204201044850.png" srcset="/img/loading.gif" lazyload /></p>
-<p><strong>为什么选择链表结构？</strong></p>
-<p>数组虽然可以用于存储线性的数据，但它有以下缺点：</p>
-<ul>
-<li>数组的大小是固定的，因此我们必须提前了解元素数量的上限。此外通常，当使用数组时，分配的空间需等于上限，这不可避免的可能产生了内存浪费。</li>
-<li>在数组的指定位置插入一个新元素其代价是昂贵的，因为必须给新元素腾出一个空间，并且新元素后的所有元素必须相应都往后移动一个位置；同样的，删除一个元素的代价同样昂贵，删除元素后面的所有元素都需往前移动一个位置。</li>
-</ul>
-<p><strong>链表相较于数组的优点</strong></p>
-<ul>
-<li>动态大小，不需要提前设定链表长度</li>
-<li>插入删除操作简单</li>
-</ul>
-<p><strong>缺点</strong></p>
-<ul>
-<li>不允许随机访问（通过元素下标）。链表元素离散存储的属性决定了链表元素的访问只能从头节点顺序进行访问</li>
-<li>链表的每个元素需要指向下一元素指针的额外内存空间</li>
-</ul>
-<p><strong>链表的表示形式</strong></p>
-<p>链表由一个指向链表的第一个节点的指针表示。第一个节点称为头节点。如果链表为空，则头节点指向NULL。</p>
-<p>链表中的每一个节点至少由两部分组成：</p>
-<ol type="1">
-<li>数据</li>
-<li>指向下一节点的指针（或引用）</li>
-</ol>
-<p>以下是C++的链表节点表示</p>
-<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-comment">// A linked list node</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Node</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-type">int</span> data;<br>    Node* next;<br>&#125;;<br><br></code></pre></div></td></tr></table></figure>
-<p><strong>一个简单链表的例子</strong></p>
-<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-comment">// A simple CPP program to introduce</span><br><span class="hljs-comment">// a linked list</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Node</span> &#123;<br><span class="hljs-keyword">public</span>:<br>	<span class="hljs-type">int</span> data;<br>	Node* next;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	Node* head = <span class="hljs-literal">NULL</span>;<br>	Node* second = <span class="hljs-literal">NULL</span>;<br>	Node* third = <span class="hljs-literal">NULL</span>;<br><br>	<span class="hljs-comment">// allocate 3 nodes in the heap</span><br>	head = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Node</span>();<br>	second = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Node</span>();<br>	third = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Node</span>();<br><br>	head-&gt;data = <span class="hljs-number">1</span>; <br>	head-&gt;next = second; <br>	<br>	second-&gt;data = <span class="hljs-number">2</span>;<br>	second-&gt;next = third;<br><br>	third-&gt;data = <span class="hljs-number">3</span>; <br>	third-&gt;next = <span class="hljs-literal">NULL</span>;<br><br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
-<pre><code class=" mermaid">graph LR
-0((head))--&gt;1--&gt;2--&gt;3--&gt;NULL
-
-</code></pre>
-<p><strong>链表的遍历</strong></p>
-<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-comment">// A simple C++ program for traversal of a linked list</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Node</span> &#123;<br><span class="hljs-keyword">public</span>:<br>	<span class="hljs-type">int</span> data;<br>	Node* next;<br>&#125;;<br><br><span class="hljs-comment">// This function prints contents of linked list</span><br><span class="hljs-comment">// starting from the given node</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">printList</span><span class="hljs-params">(Node* n)</span></span>&#123;<br>	<span class="hljs-keyword">while</span> (n != <span class="hljs-literal">NULL</span>) &#123;<br>		cout &lt;&lt; n-&gt;data &lt;&lt; <span class="hljs-string">&quot; &quot;</span>;<br>		n = n-&gt;next;<br>	&#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>	Node* head = <span class="hljs-literal">NULL</span>;<br>	Node* second = <span class="hljs-literal">NULL</span>;<br>	Node* third = <span class="hljs-literal">NULL</span>;<br><br>	<span class="hljs-comment">// allocate 3 nodes in the heap</span><br>	head = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Node</span>();<br>	second = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Node</span>();<br>	third = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Node</span>();<br><br>	head-&gt;data = <span class="hljs-number">1</span>; <br>	head-&gt;next = second; <br><br>	second-&gt;data = <span class="hljs-number">2</span>; <br>	second-&gt;next = third;<br><br>	third-&gt;data = <span class="hljs-number">3</span>; <br>	third-&gt;next = <span class="hljs-literal">NULL</span>;<br><br>	<span class="hljs-built_in">printList</span>(head);<br><br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><br><br></code></pre></div></td></tr></table></figure>
-<p><strong>Output:</strong></p>
-<figure class="highlight basic"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs basic"><span class="hljs-symbol">1 </span> <span class="hljs-number">2</span>  <span class="hljs-number">3</span><br></code></pre></div></td></tr></table></figure>
+src="https://raw.githubusercontent.com/zcy510/imagebed/main/img/202204201848560.png" srcset="/img/loading.gif" lazyload /></p>
+<p>C++实现代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-comment">//参数为一个指向头指针的指针，和一个新节点的数据</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">push</span><span class="hljs-params">(Node** head_ref, <span class="hljs-type">int</span> new_data)</span></span>&#123;<br>	<span class="hljs-comment">//创建新节点</span><br>	Node* new_node = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Node</span>();<br>	new_node-&gt;data = new_data;<br>	<span class="hljs-comment">//新节点应该指向头节点（之前的）</span><br>	new_node-&gt;next = (*head_ref);<br>	<span class="hljs-comment">//新的头节点应该是刚插入的新节点</span><br>	(*head_ref) = new_node;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+<p><strong>在指定节点后面插入新节点</strong></p>
+<p><img
+src="https://raw.githubusercontent.com/zcy510/imagebed/main/img/202204201853068.png" srcset="/img/loading.gif" lazyload /></p>
+<p>C++实现代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-comment">//参数为给定插入位置节点，和新节点数据</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">insertAfter</span><span class="hljs-params">(Node* prev_node, <span class="hljs-type">int</span> new_data)</span></span>&#123;<br><br>	<span class="hljs-comment">// 检查位置节点是否为NULL，如果是的话，就返回，说明参数传错了；前驱节点不能为NULL</span><br>	<span class="hljs-keyword">if</span> (prev_node == <span class="hljs-literal">NULL</span>) &#123;<br>		<span class="hljs-keyword">return</span>;<br>	&#125;<br><br>	<span class="hljs-comment">//创建新的节点</span><br>	Node* new_node = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Node</span>();<br>	new_node-&gt;data = new_data;<br>	<span class="hljs-comment">// 新节点的应该指向prev_node的下一个节点</span><br>	new_node-&gt;next = prev_node-&gt;next;<br>	<span class="hljs-comment">//prev_node应该指向新节点</span><br>	prev_node-&gt;next = new_node;<br>&#125;<br></code></pre></div></td></tr></table></figure>
+<p><strong>在链表尾部插入新节点</strong></p>
+<p><img
+src="https://raw.githubusercontent.com/zcy510/imagebed/main/img/202204201900598.png" srcset="/img/loading.gif" lazyload /></p>
+<p>C++实现代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-comment">//参数为一个指向头指针的指针，和一个新节点的数据</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">append</span><span class="hljs-params">(Node** head_ref, <span class="hljs-type">int</span> new_data)</span></span>&#123;<br>	<span class="hljs-comment">// 创建新节点</span><br>	Node* new_node = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Node</span>();<br>	new_node-&gt;data = new_data;<br>	<span class="hljs-comment">// 新节点应该指向NULL</span><br>	new_node-&gt;next = <span class="hljs-literal">NULL</span>;<br>	<span class="hljs-comment">// 判断链表是否为空，如果是，则直接头节点指向新节点，然后返回即可</span><br>	<span class="hljs-keyword">if</span> (*head_ref == <span class="hljs-literal">NULL</span>)&#123;<br>		*head_ref = new_node;<br>		<span class="hljs-keyword">return</span>;<br>	&#125;<br>	<span class="hljs-comment">//从头节点开始遍历，寻找尾节点</span><br>	Node *last = *head_ref;<br>	<span class="hljs-keyword">while</span> (last-&gt;next != <span class="hljs-literal">NULL</span>)&#123;<br>		last = last-&gt;next;<br>	&#125;<br>	<span class="hljs-comment">// 将尾节点指向新节点</span><br>	last-&gt;next = new_node;<br>	<span class="hljs-keyword">return</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
 
             </div>
             <hr>
@@ -326,18 +303,12 @@ src="https://raw.githubusercontent.com/zcy510/imagebed/main/img/202204201044850.
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/04/20/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E2%80%94%E2%80%94%E5%8D%95%E5%90%91%E9%93%BE%E8%A1%A81/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">数据结构——单向链表|插入操作</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/04/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E6%9C%9F%E6%9C%AB%E9%A1%B9%E7%9B%AE%E2%80%94%E2%80%94C-%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E5%85%89%E8%BF%BD%E6%A8%A1%E5%9E%8B/">
-                        <span class="hidden-mobile">计算机图形学期末项目——C++实现一个简单的光追模型</span>
+                      <a href="/2022/04/20/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E2%80%94%E2%80%94%E5%8D%95%E5%90%91%E9%93%BE%E8%A1%A8/">
+                        <span class="hidden-mobile">数据结构——单向链表|引入</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
