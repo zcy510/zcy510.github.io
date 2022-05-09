@@ -24,7 +24,7 @@
 <meta property="og:description" content="本文讲述操作系统学习过程中使用PV原语操作信号量来处理进程间的同步与互斥的问题。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-05-09T02:23:19.000Z">
-<meta property="article:modified_time" content="2022-05-09T02:31:39.303Z">
+<meta property="article:modified_time" content="2022-05-09T05:32:44.592Z">
 <meta property="article:author" content="Zcy">
 <meta property="article:tag" content="操作系统">
 <meta name="twitter:card" content="summary_large_image">
@@ -202,7 +202,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      43 字
+      1k 字
     </span>
   
 
@@ -211,7 +211,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      1 分钟
+      9 分钟
     </span>
   
 
@@ -257,15 +257,149 @@
               </p>
             
             <div class="markdown-body">
-              &lt;!DOCTYPE html&gt;
-<html>
-<head>
-<title style="color:blue">
+              <h1 style="font-size:70px;color:purple;font-family:楷体;">
 PV原语操作
-</title>
-</head>
-</html>
-<p>&lt;/!doctype&gt;</p>
+</h1>
+<p><br/> <br/></p>
+<p style="text-indent:50px;font-family:楷体;font-size:25px;color:purple">
+PV原语通过操作信号量来处理进程间的同步与互斥的问题。其核心就是一段不可分割不可中断的程序。
+信号量的概念1965年由著名的荷兰计算机科学家Dijkstra提出，其基本思路是用一种新的变量类型(semaphore)来记录当前可用资源的数量。
+</p>
+<p><br/></p>
+<p><br/></p>
+<p style="font-family:楷体;font-size:25px;color:purple">
+semaphore有两种实现方式： <br/>
+<li style="font-family:楷体;font-size:25px">
+semaphore的取值必须大于或等于0。0表示当前已没有空闲资源，而正数表示当前空闲资源的数量；
+</li>
+<br/>
+<li style="font-family:楷体;font-size:25px">
+semaphore的取值可正可负，负数的绝对值表示正在等待进入临界区的进程个数。
+</li>
+</p>
+<br/>
+<p style="text-indent:50px;font-family:楷体;font-size:25px;color:purple">
+信号量是由操作系统来维护的，用户进程只能通过初始化和两个标准原语(P、V原语)来访问。初始化可指定一个非负整数，即空闲资源总数。
+</p>
+<p><br/><br/></p>
+<p style="color:purple;font-family:楷体;font-size:25px">
+P原语：
+</p>
+<p style="font-family:楷体;font-size:20px">
+P是荷兰语Proberen(测试)的首字母。为阻塞原语，负责把当前进程由运行状态转换为阻塞状态，直到另外一个进程唤醒它。操作为：申请一个空闲资源(把信号量减1)，若成功，则退出；若失败，则该进程被阻塞；
+</p>
+<p style="color:purple;font-family:楷体;font-size:25px">
+V原语：
+</p>
+<p style="font-family:楷体;font-size:20px">
+V是荷兰语Verhogen(增加)的首字母。为唤醒原语，负责把一个被阻塞的进程唤醒，它有一个参数表，存放着等待被唤醒的进程信息。操作为：释放一个被占用的资源(把信号量加1)，如果发现有被阻塞的进程，则选择一个唤醒之。
+</p>
+<p><br/></p>
+<p><br/></p>
+<p style="color:purple;font-size:25px;font-family:楷体">
+P原语操作的动作是：
+</p>
+<ol style="font-family:楷体;font-size:20px">
+<li>
+semaphore减1
+</li>
+<li>
+若semaphore减1后仍大于或等于零，则进程继续执行
+</li>
+<li>
+若semaphore减1后小于零，则该进程被阻塞后进入与该信号相对应的队列中，然后转进程调度
+</li>
+</ol>
+<p style="color:purple;font-size:25px;font-family:楷体">
+V原语操作的动作是：
+</p>
+<ol style="font-family:楷体;font-size:20px">
+<li>
+semaphore加1
+</li>
+<li>
+若相加结果大于零，则进程继续执行
+</li>
+<li>
+若相加结果小于或等于零，则从该信号的等待队列中唤醒一等待进程，然后再返回原进程继续执行或转进程调度
+</li>
+</ol>
+<p><br/></p>
+<p><b style="color:red;font-size:30px;">
+注意！PV操作对于每一个进程来说，都只能进行一次，而且必须成对使用。在PV原语执行期间不允许有中断的发生。
+</b></p>
+<p><br/></p>
+<p><br/></p>
+<hr />
+<p><br/></p>
+<p><br/></p>
+<p style="color:purple;font-size:25px;font-family:楷体">
+具体PV原语对信号量的操作可以分为三种情况：
+</p>
+<ol style="font-family:楷体;font-size:18px">
+<li>
+把信号量视为一个加锁标志位，实现对一个共享变量的互斥访问。
+</li>
+<p style="font-family:楷体;font-size:18px">
+实现过程：
+<ul style="font-family:楷体;font-size:18px">
+<li>
+P(mutex); // mutex的初始值为1 访问该共享数据;
+</li>
+<li>
+V(mutex);
+</li>
+<li>
+非临界区;
+</li>
+</ul>
+</p>
+<li>
+把信号量视为是某种类型的共享资源的剩余个数，实现对一类共享资源的访问。
+</li>
+<p style="font-family:楷体;font-size:18px">
+实现过程：
+<ul style="font-family:楷体;font-size:18px">
+<li>
+P(mutex); // mutex的初始值为该资源的个数N，使用该资源;
+</li>
+<li>
+V(mutex);
+</li>
+<li>
+非临界区;
+</li>
+</ul>
+</p>
+<li>
+把信号量作为进程间的同步工具
+</li>
+<p style="font-family:楷体;font-size:18px">
+实现过程：
+<ul style="font-family:楷体;font-size:18px">
+<li>
+临界区C1;
+</li>
+<li>
+P(mutex);
+//一般mutex初值为1，视情况而定；当值为0时，不允许其他进程进入临界区
+</li>
+<li>
+V(mutex);
+</li>
+<li>
+非临界区C2;
+</li>
+</ul>
+</p>
+</ol>
+<p><br/><br/></p>
+<hr />
+<p><br/></p>
+<p><br/></p>
+<h3 style="font-size:50px;color:purple;font-family:楷体">
+举例说明
+</h3>
 
             </div>
             <hr>
