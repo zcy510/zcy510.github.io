@@ -24,7 +24,7 @@
 <meta property="og:description" content="单向链表的插入操作">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-04-20T09:24:06.000Z">
-<meta property="article:modified_time" content="2022-04-20T14:49:25.489Z">
+<meta property="article:modified_time" content="2022-06-10T13:39:05.813Z">
 <meta property="article:author" content="Zcy">
 <meta property="article:tag" content="数据结构">
 <meta property="article:tag" content="链表">
@@ -253,25 +253,19 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：19 天前
+                  本文最后更新于：1 分钟前
                 
               </p>
             
             <div class="markdown-body">
               <h1 id="单向链表插入">单向链表|插入</h1>
 <p><strong>在链表头部插入新节点</strong></p>
-<p><img
-src="https://raw.githubusercontent.com/zcy510/imagebed/main/img/202204201848560.png" srcset="/img/loading.gif" lazyload /></p>
 <p>C++实现代码：</p>
 <figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-comment">//参数为一个指向头指针的指针，和一个新节点的数据</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">push</span><span class="hljs-params">(Node** head_ref, <span class="hljs-type">int</span> new_data)</span></span>&#123;<br>	<span class="hljs-comment">//创建新节点</span><br>	Node* new_node = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Node</span>();<br>	new_node-&gt;data = new_data;<br>	<span class="hljs-comment">//新节点应该指向头节点（之前的）</span><br>	new_node-&gt;next = (*head_ref);<br>	<span class="hljs-comment">//新的头节点应该是刚插入的新节点</span><br>	(*head_ref) = new_node;<br>&#125;<br></code></pre></div></td></tr></table></figure>
 <p><strong>在指定节点后面插入新节点</strong></p>
-<p><img
-src="https://raw.githubusercontent.com/zcy510/imagebed/main/img/202204201853068.png" srcset="/img/loading.gif" lazyload /></p>
 <p>C++实现代码：</p>
 <figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-comment">//参数为给定插入位置节点，和新节点数据</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">insertAfter</span><span class="hljs-params">(Node* prev_node, <span class="hljs-type">int</span> new_data)</span></span>&#123;<br><br>	<span class="hljs-comment">// 检查位置节点是否为NULL，如果是的话，就返回，说明参数传错了；前驱节点不能为NULL</span><br>	<span class="hljs-keyword">if</span> (prev_node == <span class="hljs-literal">NULL</span>) &#123;<br>		<span class="hljs-keyword">return</span>;<br>	&#125;<br><br>	<span class="hljs-comment">//创建新的节点</span><br>	Node* new_node = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Node</span>();<br>	new_node-&gt;data = new_data;<br>	<span class="hljs-comment">// 新节点的应该指向prev_node的下一个节点</span><br>	new_node-&gt;next = prev_node-&gt;next;<br>	<span class="hljs-comment">//prev_node应该指向新节点</span><br>	prev_node-&gt;next = new_node;<br>&#125;<br></code></pre></div></td></tr></table></figure>
 <p><strong>在链表尾部插入新节点</strong></p>
-<p><img
-src="https://raw.githubusercontent.com/zcy510/imagebed/main/img/202204201900598.png" srcset="/img/loading.gif" lazyload /></p>
 <p>C++实现代码：</p>
 <figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-comment">//参数为一个指向头指针的指针，和一个新节点的数据</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">append</span><span class="hljs-params">(Node** head_ref, <span class="hljs-type">int</span> new_data)</span></span>&#123;<br>	<span class="hljs-comment">// 创建新节点</span><br>	Node* new_node = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Node</span>();<br>	new_node-&gt;data = new_data;<br>	<span class="hljs-comment">// 新节点应该指向NULL</span><br>	new_node-&gt;next = <span class="hljs-literal">NULL</span>;<br>	<span class="hljs-comment">// 判断链表是否为空，如果是，则直接头节点指向新节点，然后返回即可</span><br>	<span class="hljs-keyword">if</span> (*head_ref == <span class="hljs-literal">NULL</span>)&#123;<br>		*head_ref = new_node;<br>		<span class="hljs-keyword">return</span>;<br>	&#125;<br>	<span class="hljs-comment">//从头节点开始遍历，寻找尾节点</span><br>	Node *last = *head_ref;<br>	<span class="hljs-keyword">while</span> (last-&gt;next != <span class="hljs-literal">NULL</span>)&#123;<br>		last = last-&gt;next;<br>	&#125;<br>	<span class="hljs-comment">// 将尾节点指向新节点</span><br>	last-&gt;next = new_node;<br>	<span class="hljs-keyword">return</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
 
